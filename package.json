@@ -1,0 +1,22 @@
+{
+  "name": "serverless-plugin",
+  "version": "1.0.0",
+  "description": "Serverless plugin template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.2"
+  },
+  "peerDependencies": {
+    "serverless": "2.x"
+  },
+  "engines": {
+    "node": ">=12.0"
+  },
+  "license": "MIT"
+}
