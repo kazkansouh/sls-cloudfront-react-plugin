@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2021  Karim Kanso
+  Copyright (C) 2022  Karim Kanso
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 */
 
 module.exports = async (serverless, template) => {
+  const service = serverless.service
   const resources = {
     WebRootBucket: {
       Type: 'AWS::S3::Bucket',
@@ -33,7 +34,7 @@ module.exports = async (serverless, template) => {
       Properties: {
         CloudFrontOriginAccessIdentityConfig: {
           Comment:
-            '${self:service} WebRootBucket (${opt:stage, self:provider.stage})',
+            `${service.service} WebRootBucket (${service.provider.stage})`,
         },
       },
     },
@@ -66,7 +67,7 @@ module.exports = async (serverless, template) => {
       Type: 'AWS::CloudFront::Distribution',
       Properties: {
         DistributionConfig: {
-          Aliases: ['${self:custom.CloudfrontReactPlugin.domainName}'],
+          Aliases: [service.custom.CloudfrontReactPlugin.domainName],
           CustomErrorResponses: [
             {
               ErrorCachingMinTTL: 86400,
@@ -106,7 +107,7 @@ module.exports = async (serverless, template) => {
           PriceClass: 'PriceClass_100',
           ViewerCertificate: {
             AcmCertificateArn:
-              '${self:custom.CloudfrontReactPlugin.certificateArn}',
+              service.custom.CloudfrontReactPlugin.certificateArn,
             MinimumProtocolVersion: 'TLSv1.2_2021',
             SslSupportMethod: 'sni-only',
           },
@@ -120,10 +121,10 @@ module.exports = async (serverless, template) => {
           DNSName: {
             'Fn::GetAtt': 'Webserver.DomainName',
           },
-          HostedZoneId: 'Z2FDTNDATAQYW2',
+          HostedZoneId: 'Z2FDTNDATAQYW2', /* cloudfront */
         },
-        HostedZoneId: '${self:custom.CloudfrontReactPlugin.hostedZoneId}',
-        Name: '${self:custom.CloudfrontReactPlugin.domainName}',
+        HostedZoneId: service.custom.CloudfrontReactPlugin.hostedZoneId,
+        Name: service.custom.CloudfrontReactPlugin.domainName,
         Type: 'A',
       },
     },
@@ -134,10 +135,10 @@ module.exports = async (serverless, template) => {
           DNSName: {
             'Fn::GetAtt': 'Webserver.DomainName',
           },
-          HostedZoneId: 'Z2FDTNDATAQYW2',
+          HostedZoneId: 'Z2FDTNDATAQYW2', /* cloudfront */
         },
-        HostedZoneId: '${self:custom.CloudfrontReactPlugin.hostedZoneId}',
-        Name: '${self:custom.CloudfrontReactPlugin.domainName}',
+        HostedZoneId: service.custom.CloudfrontReactPlugin.hostedZoneId,
+        Name: service.custom.CloudfrontReactPlugin.domainName,
         Type: 'AAAA',
       },
     },
@@ -145,8 +146,8 @@ module.exports = async (serverless, template) => {
 
   Object.assign(
     template.Resources,
-    await serverless.variables.populateObject(resources),
-  );
+    resources
+  )
 
   template.Outputs.WebRootBucketName = {
     Value: {

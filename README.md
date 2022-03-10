@@ -78,7 +78,7 @@ custom:
     REACT_APP:
       NAME: ${self:service}-${sls:stage}
       API_URL:
-        output: HttpApiUrl
+        output: ServiceEndpoint
 ```
 
 Here it is assumed that the domain `example.com` is hosted in Route53 with the
@@ -90,7 +90,7 @@ each stage.
 It also assumes there is a React application created with `create-react-app`
 located in `../react-app`. This app makes use of the environment variable
 `REACT_APP_API_URL`. This environment variable will be set to the URL of the
-`httpApi` endpoint by looking up `HttpApiUrl` from the CloudFormation stack
+`httpApi` endpoint by looking up `ServiceEndpoint` from the CloudFormation stack
 outputs.
 
 ## Example Config: Cognito
@@ -141,7 +141,7 @@ custom:
         output: SPAClientID
       SERVICE_URL: https://cognito-idp.${aws:region}.amazonaws.com/${self:custom.userPoolId}
       API_URL:
-        output: HttpApiUrl
+        output: ServiceEndpoint
 resources:
   Resources:
     SPAClient:
@@ -184,4 +184,4 @@ authorizer is configured with the same id in the audience.
 
 ## Other bits
 
-Copyright 2021, Karim Kanso. All rights reserved. Work licensed under GPLv3.
+Copyright 2022, Karim Kanso. All rights reserved. Work licensed under GPLv3.
