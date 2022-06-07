@@ -36,6 +36,18 @@ As the CRA is compiled after the serverless application has been deployed this
 is implemented by allowing any `Output` from the CloudFormation template to be
 be provided as a `REACT_APP_` environment variable.
 
+## Install
+
+Clone this repo, then do a `npm i` inside of it. To use it, list the
+directory in the `plugins` section. E.g.:
+
+```yml
+plugins:
+  - ../sls-cloudfront-react-plugin
+```
+
+Further configuration is detailed below.
+
 ## CLI Usage
 
 The plugin hooks into the `before:package:finalize` lifecycle hook to inject
@@ -69,6 +81,8 @@ functions:
     handler: handler.hello
     events:
       - httpApi: 'GET /api'
+plugins:
+  - ../sls-cloudfront-react-plugin
 custom:
   CloudfrontReactPlugin:
     domainName: ${self:service}-${sls:stage}.example.com
